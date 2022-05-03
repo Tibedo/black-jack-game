@@ -1,0 +1,28 @@
+#game {
+    width: 70%;
+    height: 100%;
+    padding: 100px;
+    margin:0 auto;
+    border: 5px solid black;
+    
+   
+}
+
+img {
+    width: 20%;
+}
+
+#hit, #stay {
+    border-radius: 50px;
+    width: 10%;
+    padding: 10px 10px;
+    color: white;
+}
+
+#hit {
+    background-color: green;
+}
+
+#stay {
+    background-color: red;
+}
