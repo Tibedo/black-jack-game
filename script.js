@@ -1,3 +1,5 @@
+
+// ************* VARIABLES ************* //
 let deck;
 let hidden;
 
@@ -11,6 +13,7 @@ let canHit = true;
 
 window.onload = createDeck(), shuffleDeck(), startGame()
 
+// ************* DECK ************* //
 function createDeck() {
     
     let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -25,7 +28,7 @@ function createDeck() {
     //console.log(deck);
 }
 
-
+// ************* MELANGER DECK ************* //
 function shuffleDeck() {
 
     for ( let i = 0; i < deck.length; i++) {
@@ -38,14 +41,15 @@ function shuffleDeck() {
 }
 
 
-
+// ************* DISTRIBUTION CARTES ************* //
 function startGame() {
     hidden = deck.pop();
     dealerSum += getValue(hidden);
     dealerAce += checkAce(hidden);
     //console.log(hidden);
-   //console.log(dealerSum)
+    //console.log(dealerSum)
 
+// CARTES DU DEALER //
    for (let i = 0; i < 1; i++) {
     let cardImg = document.createElement("img")
     let card = deck.pop();
@@ -53,9 +57,9 @@ function startGame() {
     dealerSum += getValue(card);
     dealerAce += checkAce(card);
     document.getElementById("dealer-cards").append(cardImg)
-
 }
 
+// CARTES DU JOUEUR //
    for (let i =0; i < 2; i++) {
     let cardImg = document.createElement("img")
     let card = deck.pop();
@@ -63,11 +67,14 @@ function startGame() {
     playerSum += getValue(card);
     playerAce += checkAce(card);
     document.getElementById("player-cards").append(cardImg)
-
     }
-
+    let displayPlayer = document.getElementById("player-sum");
+    displayPlayer.innerText = playerSum
+    console.log(playerSum)
+    console.log(dealerSum)
 }
 
+// ************* DEFINIR VALEUR DES CARTES ************* //
 function getValue(card) {
     let data = card.split("-"); // "6-H" -> ["6", "H"]
     let value = data[0];
@@ -78,9 +85,11 @@ function getValue(card) {
         }
         return 10
     }
-    return parseInt(value);
+    return parseInt(value);   
 }
 
+
+// ************* DEFINIR SI AS = 11 ou 1 ************* //
 function checkAce(card) {
     if (card[0] == "A") {
         return 1;
@@ -88,15 +97,15 @@ function checkAce(card) {
     return 0;
 }
 
-function reduceAce(playerSum, playerAce) {
-    while (playerSum > 21 && playerAce > 0) {
-        playerSum -= 10;
-        playerAce -= 1;
+function reduceAce(yourSum, yourAce) {
+    while (yourSum > 21 && yourAce > 0) {
+        yourSum -= 10;
+        yourAce -= 1;
     }
-    return playerSum;
+    return yourSum;
 }
 
-
+// ************* TIRER UNE CARTE ************* //
 function hit() {
     if (!canHit) {
         return;
@@ -110,12 +119,33 @@ function hit() {
 
     if (reduceAce(playerSum, playerAce) > 21) {
         canHit = false;
-    }
-
+    }   
+    let displayPlayer = document.getElementById("player-sum");
+    displayPlayer.innerText = playerSum
 }
 document.getElementById("hit").addEventListener("click", hit)
 
 
+// ************* LE DEALER TIRE UNE CARTE ************* //
+function dealerHit() {
+    
+    while (dealerSum < 17) {
+        let cardImg = document.createElement("img")
+        let card = deck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        dealerSum += getValue(card);
+        dealerAce += checkAce(card);
+        document.getElementById("dealer-cards").append(cardImg)
+    }
+    
+    let displayDealer = document.getElementById("dealer-sum");
+    displayDealer.innerText = dealerSum
+}
+let deal = document.getElementById("stay")
+deal.addEventListener("click", dealerHit)
+
+
+// ************* ARRETER DE TIRER + RESULTAT ************* //
 function stay() {
     dealerSum = reduceAce(dealerSum, dealerAce);
     playerSum = reduceAce(playerSum, playerAce);
@@ -125,42 +155,32 @@ function stay() {
 
     let message = "";
     if (playerSum > 21) {
-        message = "You Loose!";
+        message = "You LOOSE!";
     }
     else if (dealerSum > 21) {
-        message = "You Win!";
+        message = "You WIN!";
     }
     else if (playerSum == dealerSum) {
-        message = "GOD";
+        message = "Grrrrrr";
     }
     else if (playerSum > dealerSum) {
-        message = "You Win!";
+        message = "You WIN!";
     }
     else if (playerSum < dealerSum) {
-        message = "You Loose!";
+        message = "You LOOSE!";
     }
-   
-    document.getElementsByClassName("results").innerText = message;
+
+    let displayPlayer = document.getElementById("player-sum");
+    displayPlayer.innerText = playerSum  
+    let displayDealer = document.getElementById("dealer-sum");
+    displayDealer.innerText = dealerSum
+    document.getElementById("results").innerText = message;
 }
+
 document.getElementById("stay").addEventListener("click", stay)
 
 
-function dealerHit() {
-    while (dealerSum < 17) {
-        let cardImg = document.createElement("img")
-        let card = deck.pop();
-        cardImg.src = "./cards/" + card + ".png";
-        dealerSum += getValue(card);
-        dealerAce += checkAce(card);
-        document.getElementById("dealer-cards").append(cardImg)
 
-    }
-}
-
-
-let deal = document.getElementById("stay")
-
-deal.addEventListener("click", dealerHit)
 
 
 
