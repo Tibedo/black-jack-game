@@ -18,7 +18,7 @@ img {
     box-shadow: 0 20px 10px black;
 }
 
-#hit, #stay {
+#hit, #stay, #restart {
     border-radius: 50px;
     width: 20%;
     padding: 10px 10px;
@@ -33,6 +33,10 @@ img {
 
 #stay {
     background-color: red;
+}
+
+#restart {
+    background-color: blue;
 }
 
 #results {

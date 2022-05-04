@@ -13,6 +13,7 @@ let canHit = true;
 
 window.onload = createDeck(), shuffleDeck(), startGame()
 
+
 // ************* DECK ************* //
 function createDeck() {
     
@@ -43,6 +44,7 @@ function shuffleDeck() {
 
 // ************* DISTRIBUTION CARTES ************* //
 function startGame() {
+    
     hidden = deck.pop();
     dealerSum += getValue(hidden);
     dealerAce += checkAce(hidden);
@@ -73,6 +75,7 @@ function startGame() {
     console.log(playerSum)
     console.log(dealerSum)
 }
+
 
 // ************* DEFINIR VALEUR DES CARTES ************* //
 function getValue(card) {
@@ -119,9 +122,14 @@ function hit() {
 
     if (reduceAce(playerSum, playerAce) > 21) {
         canHit = false;
-    }   
+    }  
+    if (playerSum > 21) {
+        stay();
+        replayButton();
+    } 
     let displayPlayer = document.getElementById("player-sum");
     displayPlayer.innerText = playerSum
+
 }
 document.getElementById("hit").addEventListener("click", hit)
 
@@ -177,7 +185,24 @@ function stay() {
     document.getElementById("results").innerText = message;
 }
 
+
+// *********** REJOUER *********** //
+function replay() {
+    location.reload()
+}
+
+// ********** BOUTON REJOUER *********** //
+function replayButton() {
+    let go = document.createElement("button")
+    go.innerHTML = "REPLAY"
+    go.id = "restart"
+    document.body.appendChild(go)
+
+    go.addEventListener("click", replay)
+}
 document.getElementById("stay").addEventListener("click", stay)
+document.getElementById("stay").addEventListener("click", replayButton)
+
 
 
 
